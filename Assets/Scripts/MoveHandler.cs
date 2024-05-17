@@ -1,16 +1,17 @@
+using System;
 using UnityEngine;
 
 public class MoveHandler : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private Transform playerTargetTransform;
+
+    private void Update()
     {
-        
+        GameManager.Instance.OnLeftClick += OnLeftClick;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnLeftClick()
     {
-        
+        playerTargetTransform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 }
