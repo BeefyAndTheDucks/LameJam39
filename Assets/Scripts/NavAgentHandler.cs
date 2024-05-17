@@ -18,7 +18,15 @@ public class NavAgentHandler : MonoBehaviour
 
     private void Update()
     {
-        agent.SetDestination(target.position);
+        if (!agent.pathPending && agent.destination != target.position)
+        {
+            target.position = new Vector3(target.position.x, target.position.y, transform.position.z);
+            bool success = agent.SetDestination(target.position);
+            if (!success)
+            {
+                Debug.LogWarning("Couldn't get path.");
+            }
+        }
 
         Vector3 velocity = agent.velocity;
 

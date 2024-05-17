@@ -5,7 +5,7 @@ public class MoveHandler : MonoBehaviour
 {
     [SerializeField] private Transform playerTargetTransform;
 
-    private void Update()
+    private void Start()
     {
         GameManager.Instance.OnLeftClick += OnLeftClick;
     }
