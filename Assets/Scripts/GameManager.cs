@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private ContextMenuHandler contextMenuHandler;
     [SerializeField] private NavMeshSurface navMesh;
-    [SerializeField] private bool useBuildNavMeshAsync;
+    [SerializeField] private float maximumContextMenuDistance = 2.0f;
 
     private bool recalcNavMesh = true;
 
@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
         {
             Vector2 clickedPosition = cachedCameraMain.ScreenToWorldPoint(Input.mousePosition);
             float distance = Vector2.Distance(player.position, clickedPosition);
-            if (distance > 1.5f)
+            if (distance > maximumContextMenuDistance)
                 OnChooseMove?.Invoke(clickedPosition);
             else if (!contextMenuHandler.IsContextMenuEnabled)
                 OnShowContextMenu?.Invoke(clickedPosition);
@@ -80,9 +80,6 @@ public class GameManager : MonoBehaviour
     private async void UpdateNavMesh()
     {
         Debug.Log("Updating NavMesh");
-        if (useBuildNavMeshAsync)
-            await navMesh.BuildNavMeshAsync();
-        else
-            await navMesh.UpdateNavMesh(navMesh.navMeshData);
+        await navMesh.UpdateNavMesh(navMesh.navMeshData);
     }
 }
