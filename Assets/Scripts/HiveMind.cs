@@ -28,6 +28,8 @@ public static class HiveMind
         return createdWorker;
     }
 
+    public static bool HasAvailableWorkers() => workerQueue.Count > 0;
+
     private static void OnDeath(object sender, System.EventArgs e)
     {
         Worker worker = sender as Worker;
