@@ -8,12 +8,17 @@ public class NavAgentHandler : MonoBehaviour
     [SerializeField] private float rotationSpeedMultiplier = 5f;
 
     private NavMeshAgent agent;
+    private LineRenderer lineRenderer;
+
+    private bool useLineRenderer;
 
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
         agent.updateUpAxis = false;
+
+        useLineRenderer = TryGetComponent(out lineRenderer);
     }
 
     private void Update()
@@ -45,6 +50,12 @@ public class NavAgentHandler : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, desiredRotation, agent.angularSpeed * Time.deltaTime * rotationSpeedMultiplier);
 
 
+        }
+
+        if (useLineRenderer)
+        {
+            lineRenderer.positionCount = agent.path.corners.Length;
+            lineRenderer.SetPositions(agent.path.corners);
         }
     }
 
