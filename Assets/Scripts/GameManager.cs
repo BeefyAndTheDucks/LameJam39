@@ -1,14 +1,8 @@
 ﻿using System;
 using NavMeshPlus.Components;
-using UnityEngine.AI;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem.UI;
-using UnityEngine.InputSystem;
 
 [DefaultExecutionOrder(-102)]
 public class GameManager : MonoBehaviour
@@ -25,6 +19,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ContextMenuHandler contextMenuHandler;
     [SerializeField] private NavMeshSurface navMesh;
     [SerializeField] private float maximumContextMenuDistance = 2.0f;
+
+    [field: SerializeField] public Worker workerPrefab { get; private set; }
+    [field: SerializeField] public Transform workerParent { get; private set; }
 
     private bool recalcNavMesh = true;
 
@@ -48,6 +45,26 @@ public class GameManager : MonoBehaviour
                 OnChooseMove?.Invoke(clickedPosition);
             else if (!contextMenuHandler.IsContextMenuEnabled)
                 OnShowContextMenu?.Invoke(clickedPosition);
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            Debug.Log("Create Worker!");
+            HiveMind.CreateWorker();
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Debug.Log("Request & Return Worker!");
+            HiveMind.TryRequestWorker(out Worker worker);
+            Debug.Log(worker.gameObject.name);
+            HiveMind.ReturnWorker(worker);
+        }
+
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            Debug.Log("Kill Worker");
+            FindFirstObjectByType<Worker>().TakeDamage(100);
         }
 
         if (recalcNavMesh)
