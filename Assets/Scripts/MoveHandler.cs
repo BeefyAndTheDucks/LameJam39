@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class MoveHandler : MonoBehaviour
@@ -7,11 +6,12 @@ public class MoveHandler : MonoBehaviour
 
     private void Start()
     {
-        GameManager.Instance.OnLeftClick += OnLeftClick;
+        GameManager.Instance.OnChooseMove += OnChooseMove;
     }
 
-    private void OnLeftClick()
+    private void OnChooseMove(Vector2 clickedPosition)
     {
-        playerTargetTransform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (Vector2.Distance(playerTargetTransform.position, clickedPosition) > 2.0f)
+            playerTargetTransform.position = clickedPosition;
     }
 }
