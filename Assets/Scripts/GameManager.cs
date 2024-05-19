@@ -47,26 +47,6 @@ public class GameManager : MonoBehaviour
                 OnShowContextMenu?.Invoke(clickedPosition);
         }
 
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            Debug.Log("Create Worker!");
-            HiveMind.CreateWorker();
-        }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            Debug.Log("Request & Return Worker!");
-            HiveMind.TryRequestWorker(out Worker worker);
-            Debug.Log(worker.gameObject.name);
-            HiveMind.ReturnWorker(worker);
-        }
-
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            Debug.Log("Kill Worker");
-            FindFirstObjectByType<Worker>().TakeDamage(100);
-        }
-
         if (recalcNavMesh)
         {
             UpdateNavMesh();

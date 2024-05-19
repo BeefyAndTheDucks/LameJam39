@@ -15,6 +15,7 @@ public class ContextMenuHandler : MonoBehaviour
     [SerializeField] private RectTransform contextMenuTransform;
     [SerializeField] private Button contextActionPrefab;
     [SerializeField] private TMP_Text titleText;
+    [SerializeField] private TrainingCenterTile trainingCenterTile;
 
     public bool IsContextMenuEnabled => contextMenuTransform.gameObject.activeSelf;
 
@@ -113,7 +114,7 @@ public class ContextMenuHandler : MonoBehaviour
     private void WorkerReleaseWrapper(Action action, Worker worker)
     {
         action?.Invoke();
-        HiveMind.ReturnWorker(worker);
+        Workers.ReturnWorker(worker);
     }
 
     private void CreateCancelButton() => CreateButton(HideContextMenu, "Cancel", Color.red);
@@ -128,9 +129,23 @@ public class ContextMenuHandler : MonoBehaviour
         return createdButton;
     }
 
+    private void CreateBuildingButton(TileBase tile, Vector3Int position, Tilemap tilemap, string friendlyTileName) => CreateButton(() => BuildingButtonWrapper(tile, position, tilemap), friendlyTileName, Color.white);
+
+    private void BuildingButtonWrapper(TileBase tile, Vector3Int position, Tilemap tilemap) => ButtonActionWrapper(() =>
+    {
+        bool success = Workers.TryRequestWorker(out Worker worker);
+        if (!success)
+        {
+            Debug.LogError("Failed to request worker");
+            return;
+        }
+        worker.Goto(grid.CellToWorld(position), () => WorkerReleaseWrapper(() => tilemap.SetTile(position, tile), worker));
+    });
+
     private void CreateBuildContextMenu(Vector3Int cellCoordinate)
     {
         BeginContextMenu("Build");
+        CreateBuildingButton(trainingCenterTile, cellCoordinate, buildingTilemap, "Training Center");
         FinishContextMenu(cellCoordinate);
     }
 
@@ -157,14 +172,14 @@ public class ContextMenuHandler : MonoBehaviour
         BeginContextMenu("Obstacle");
         CreateButton(() => ButtonActionWrapper(() =>
         {
-            bool success = HiveMind.TryRequestWorker(out Worker worker);
+            bool success = Workers.TryRequestWorker(out Worker worker);
             if (!success)
             {
                 Debug.LogError("Failed to request worker");
                 return;
             }
             worker.Goto(grid.CellToWorld(cellCoordinate), () => WorkerReleaseWrapper(() => tilemap.SetTile(cellCoordinate, null), worker));
-        }), "Deconstruct", Color.green, HiveMind.HasAvailableWorkers());
+        }), "Deconstruct", Color.green, Workers.HasAvailableWorkers());
         FinishContextMenu(cellCoordinate);
     }
 }

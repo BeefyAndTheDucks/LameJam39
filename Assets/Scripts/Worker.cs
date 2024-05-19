@@ -21,7 +21,7 @@ public class Worker : MonoBehaviour
             OnDeath?.Invoke(this, EventArgs.Empty);
     }
 
-    public void Goto(Vector3 position, Action onArrivedAction)
+    public void Goto(Vector3 position, Action onArrivedAction = null)
     {
         navAgentHandler.SetTarget(position, onArrivedAction);
     }
