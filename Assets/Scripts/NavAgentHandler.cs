@@ -4,13 +4,18 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class NavAgentHandler : MonoBehaviour
 {
-    [SerializeField] private Transform target;
+    [SerializeField] private Vector3 target;
     [SerializeField] private float rotationSpeedMultiplier = 5f;
+    [SerializeField] private float destinationDistanceThreshold = 1f;
 
     private NavMeshAgent agent;
     private LineRenderer lineRenderer;
 
     private bool useLineRenderer;
+
+    private System.Action onArrived;
+
+    private bool hasArrived;
 
     private void Start()
     {
@@ -23,14 +28,17 @@ public class NavAgentHandler : MonoBehaviour
 
     private void Update()
     {
-        if (!agent.pathPending && agent.destination != target.position)
+        if (!agent.pathPending && agent.destination != target && agent.destination != target)
         {
-            target.position = new Vector3(target.position.x, target.position.y, transform.position.z);
-            bool success = agent.SetDestination(target.position);
+            target = new Vector3(target.x, target.y, transform.position.z);
+            bool success = agent.SetDestination(target);
             if (!success)
             {
                 Debug.LogWarning("Couldn't get path.");
+                return;
             }
+
+            hasArrived = false;
         }
 
         Vector3 velocity = agent.velocity;
@@ -52,6 +60,13 @@ public class NavAgentHandler : MonoBehaviour
 
         }
 
+        if (agent.remainingDistance < destinationDistanceThreshold && !hasArrived && !agent.pathPending)
+        {
+            onArrived?.Invoke();
+            onArrived = null;
+            hasArrived = true;
+        }
+
         if (useLineRenderer)
         {
             lineRenderer.positionCount = agent.path.corners.Length;
@@ -59,13 +74,9 @@ public class NavAgentHandler : MonoBehaviour
         }
     }
 
-    public void SetTarget(Vector3 targetPosition)
+    public void SetTarget(Vector3 targetPosition, System.Action onArrival = null)
     {
-        target.position = targetPosition;
-    }
-
-    public void SetTarget(Transform target)
-    {
-        this.target = target;
+        target = targetPosition;
+        onArrived = onArrival;
     }
 }

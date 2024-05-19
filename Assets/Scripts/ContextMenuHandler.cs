@@ -81,8 +81,6 @@ public class ContextMenuHandler : MonoBehaviour
     {
         CreateCancelButton();
 
-        //Vector3 position = grid.CellToWorld(cellCoordinate);
-        //Vector3 screenPosition = RectTransformUtility.WorldToScreenPoint(GameManager.Instance.cachedCameraMain, position);
         Vector3 screenPosition = Input.mousePosition;
         contextMenuTransform.position = screenPosition;
         contextMenuTransform.position += (Vector3)contextMenuTransform.sizeDelta / 1.5f;
@@ -112,14 +110,21 @@ public class ContextMenuHandler : MonoBehaviour
         HideContextMenu();
     }
 
+    private void WorkerReleaseWrapper(Action action, Worker worker)
+    {
+        action?.Invoke();
+        HiveMind.ReturnWorker(worker);
+    }
+
     private void CreateCancelButton() => CreateButton(HideContextMenu, "Cancel", Color.red);
 
-    private Button CreateButton(Action buttonAction, string buttonText, Color buttonColor)
+    private Button CreateButton(Action buttonAction, string buttonText, Color buttonColor, bool enabled = true)
     {
         Button createdButton = Instantiate(contextActionPrefab, contextMenuTransform);
         createdButton.image.color = buttonColor;
         createdButton.GetComponentInChildren<TMP_Text>().text = buttonText;
         createdButton.onClick.AddListener(buttonAction.Invoke);
+        createdButton.interactable = enabled;
         return createdButton;
     }
 
@@ -150,7 +155,16 @@ public class ContextMenuHandler : MonoBehaviour
     private void CreateDestructionContextMenu(Vector3Int cellCoordinate, Tilemap tilemap)
     {
         BeginContextMenu("Obstacle");
-        CreateButton(() => ButtonActionWrapper(() => tilemap.SetTile(cellCoordinate, null)), "Deconstruct", Color.green);
+        CreateButton(() => ButtonActionWrapper(() =>
+        {
+            bool success = HiveMind.TryRequestWorker(out Worker worker);
+            if (!success)
+            {
+                Debug.LogError("Failed to request worker");
+                return;
+            }
+            worker.Goto(grid.CellToWorld(cellCoordinate), () => WorkerReleaseWrapper(() => tilemap.SetTile(cellCoordinate, null), worker));
+        }), "Deconstruct", Color.green, HiveMind.HasAvailableWorkers());
         FinishContextMenu(cellCoordinate);
     }
 }
