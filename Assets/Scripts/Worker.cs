@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(NavAgentHandler))]
+[RequireComponent(typeof(NavAgentHandler), typeof(Animator))]
 public class Worker : MonoBehaviour
 {
     public event EventHandler OnDeath;
@@ -14,10 +14,12 @@ public class Worker : MonoBehaviour
     private AttackableTile attackingTile;
 
     private NavAgentHandler navAgentHandler;
+    private Animator animator;
 
     private void Awake()
     {
         navAgentHandler = GetComponent<NavAgentHandler>();
+        animator = GetComponent<Animator>();
     }
 
     public void TakeDamage(int damage)

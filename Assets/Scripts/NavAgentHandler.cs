@@ -10,8 +10,10 @@ public class NavAgentHandler : MonoBehaviour
 
     private NavMeshAgent agent;
     private LineRenderer lineRenderer;
+    private Animator animator;
 
     private bool useLineRenderer;
+    private bool useAnimator;
 
     private System.Action onArrived;
 
@@ -24,6 +26,7 @@ public class NavAgentHandler : MonoBehaviour
         agent.updateUpAxis = false;
 
         useLineRenderer = TryGetComponent(out lineRenderer);
+        useAnimator = TryGetComponent(out animator);
     }
 
     private void Update()
@@ -72,6 +75,9 @@ public class NavAgentHandler : MonoBehaviour
             lineRenderer.positionCount = agent.path.corners.Length;
             lineRenderer.SetPositions(agent.path.corners);
         }
+
+        if (useAnimator)
+            animator.SetBool("IsWalking", velocity.magnitude > 0.1f);
     }
 
     public void SetTarget(Vector3 targetPosition, System.Action onArrival = null)
