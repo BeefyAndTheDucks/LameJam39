@@ -10,7 +10,6 @@ public class ContextMenuHandler : MonoBehaviour
     [SerializeField] private Tilemap unwalkableTilemap;
     [SerializeField] private Tilemap buildingTilemap;
     [SerializeField] private Tilemap enemyTilemap;
-    [SerializeField] private Tilemap resourceTilemap;
     [SerializeField] private Grid grid;
     [SerializeField] private RectTransform contextMenuTransform;
     [SerializeField] private Button contextActionPrefab;
@@ -56,18 +55,7 @@ public class ContextMenuHandler : MonoBehaviour
 
         // Check for building
         if (buildingTilemap.HasTile(cellCoordinate))
-        {
-            // There is a building tile. Create a configure building context menu
-            CreateBuildingConfigurationContextMenu(cellCoordinate, buildingTilemap);
             return;
-        }
-
-        if (resourceTilemap.HasTile(cellCoordinate))
-        {
-            // There is a resource tile. Create a mine context menu.
-            CreateMineContextMenu(cellCoordinate, resourceTilemap);
-            return;
-        }
 
         // There will always be ground. But a defensive check can't hurt
         if (!groundTilemap.HasTile(cellCoordinate))
@@ -85,7 +73,7 @@ public class ContextMenuHandler : MonoBehaviour
 
         Vector3 screenPosition = Input.mousePosition;
         contextMenuTransform.position = screenPosition;
-        contextMenuTransform.position += (Vector3)contextMenuTransform.sizeDelta / 1.5f;
+        //contextMenuTransform.position += (Vector3)contextMenuTransform.sizeDelta / 1.5f;
 
         contextMenuTransform.gameObject.SetActive(true);
     }
@@ -148,12 +136,6 @@ public class ContextMenuHandler : MonoBehaviour
         BeginContextMenu("Build");
         CreateBuildingButton(trainingCenterTile, cellCoordinate, buildingTilemap, "Training Center");
         CreateBuildingButton(workerHousingTile, cellCoordinate, buildingTilemap, "Worker Housing");
-        FinishContextMenu(cellCoordinate);
-    }
-
-    private void CreateMineContextMenu(Vector3Int cellCoordinate, Tilemap tilemap)
-    {
-        BeginContextMenu("Resource");
         FinishContextMenu(cellCoordinate);
     }
 
