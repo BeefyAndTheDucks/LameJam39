@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class WorkerHousingTile : Tile
+public class WorkerHousingTile : AttackableTile
 {
     [SerializeField] private bool IsEnemy;
     public int Health { get; private set; } = 50;
@@ -25,7 +25,7 @@ public class WorkerHousingTile : Tile
         return base.StartUp(position, tilemap, go);
     }
 
-    public void TakeDamage(int damage)
+    public override void TakeDamage(int damage)
     {
         Health -= damage;
         if (Health <= 0)

@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class FactionCentreTile : Tile
+public class FactionCentreTile : AttackableTile
 {
     public static FactionCentreTile Instance { get; private set; }
     public static FactionCentreTile EnemyInstance { get; private set; }
@@ -36,7 +36,7 @@ public class FactionCentreTile : Tile
         worldPosition = TileManager.Instance.CellToWorld(gridPosition);
     }
 
-    public void TakeDamage(int damage)
+    public override void TakeDamage(int damage)
     {
         Health -= damage;
         if (Health <= 0)

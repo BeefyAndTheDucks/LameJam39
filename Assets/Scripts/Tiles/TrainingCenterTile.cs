@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class TrainingCenterTile : Tile
+public class TrainingCenterTile : AttackableTile
 {
     [SerializeField] private float timeToSpawnWorker = 5;
     [SerializeField] private bool IsEnemy;
@@ -31,7 +31,7 @@ public class TrainingCenterTile : Tile
         TileManager.Instance.OnUpdate += Update;
     }
 
-    public void TakeDamage(int damage)
+    public override void TakeDamage(int damage)
     {
         Health -= damage;
         if (Health <= 0)

@@ -135,9 +135,44 @@ public class ContextMenuHandler : MonoBehaviour
         FinishContextMenu(cellCoordinate);
     }
 
+    private void CreateAttackButton(int workersToSend, Tilemap tilemap, Vector3Int cellCoordinate)
+    {
+        CreateButton(() => ButtonActionWrapper(() =>
+        {
+            TileBase tile = tilemap.GetTile(cellCoordinate);
+
+            if (tile is not AttackableTile)
+            {
+                Debug.LogError("Tried to attack non-attackable tile!");
+                return;
+            }
+
+            AttackableTile attackableTile = tile as AttackableTile;
+
+            for (int i = 0; i < workersToSend; i++)
+            {
+                bool success = Workers.TryRequestWorker(out Worker worker);
+                if (!success)
+                {
+                    Debug.LogError("Failed to request worker");
+                    return;
+                }
+
+                worker.Goto(grid.CellToWorld(cellCoordinate), () =>
+                {
+                    worker.Attack(attackableTile, () => Workers.ReturnWorker(worker));
+                });
+            }
+        }), $"Attack ({workersToSend} worker(s))", Color.yellow, Workers.HasAvailableWorkers(workersToSend));
+    }
+
     private void CreateAttackContextMenu(Vector3Int cellCoordinate, Tilemap tilemap)
     {
         BeginContextMenu("Enemy");
+        CreateAttackButton(1, tilemap, cellCoordinate);
+        CreateAttackButton(2, tilemap, cellCoordinate);
+        CreateAttackButton(5, tilemap, cellCoordinate);
+        CreateAttackButton(10, tilemap, cellCoordinate);
         FinishContextMenu(cellCoordinate);
     }
 
