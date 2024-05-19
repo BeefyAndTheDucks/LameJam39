@@ -4,12 +4,17 @@ using UnityEngine.Tilemaps;
 
 public class WorkerHousingTile : Tile
 {
+    [SerializeField] private bool IsEnemy;
+
     public override bool StartUp(Vector3Int position, ITilemap tilemap, GameObject go)
     {
         if (!Application.isPlaying)
             return false;
 
-        Workers.IncreaseWorkerLimit(2);
+        if (IsEnemy)
+            EnemyWorkers.IncreaseWorkerLimit(2);
+        else
+            Workers.IncreaseWorkerLimit(2);
 
         return base.StartUp(position, tilemap, go);
     }

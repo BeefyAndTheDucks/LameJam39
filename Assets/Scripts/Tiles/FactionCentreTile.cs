@@ -7,7 +7,7 @@ public class FactionCentreTile : Tile
     public static FactionCentreTile Instance { get; private set; }
     public static FactionCentreTile EnemyInstance { get; private set; }
 
-    public bool IsEnemy;
+    [SerializeField] private bool IsEnemy;
 
     public Vector3Int gridPosition { get; private set; }
     public Vector3 worldPosition { get; private set; }

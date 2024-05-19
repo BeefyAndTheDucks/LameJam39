@@ -7,6 +7,7 @@ using UnityEngine.Tilemaps;
 public class TrainingCenterTile : Tile
 {
     [SerializeField] private float timeToSpawnWorker = 5;
+    [SerializeField] private bool IsEnemy;
 
     private float timer;
 
@@ -34,7 +35,11 @@ public class TrainingCenterTile : Tile
         timer += Time.deltaTime;
         if (timer >= timeToSpawnWorker)
         {
-            Workers.CreateWorker(TileManager.Instance.CellToWorld(gridPosition));
+            Vector3 position = TileManager.Instance.CellToWorld(gridPosition);
+            if (IsEnemy)
+                EnemyWorkers.CreateWorker(position);
+            else
+                Workers.CreateWorker(position);
             timer = 0;
         }
     }
