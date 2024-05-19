@@ -6,6 +6,7 @@ public class Worker : MonoBehaviour
 {
     public event EventHandler OnDeath;
     public int Health { get; private set; } = 100;
+    public bool IsEnemy = false;
 
     private NavAgentHandler navAgentHandler;
 
