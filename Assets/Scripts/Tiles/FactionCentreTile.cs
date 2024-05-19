@@ -12,6 +12,8 @@ public class FactionCentreTile : Tile
     public Vector3Int gridPosition { get; private set; }
     public Vector3 worldPosition { get; private set; }
 
+    public int Health { get; private set; } = 500;
+
     public override bool StartUp(Vector3Int position, ITilemap tilemap, GameObject go)
     {
         if (IsEnemy)
@@ -32,6 +34,19 @@ public class FactionCentreTile : Tile
     private void RegisterWorldPosition()
     {
         worldPosition = TileManager.Instance.CellToWorld(gridPosition);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        Health -= damage;
+        if (Health <= 0)
+        {
+            // Lose...
+            if (IsEnemy)
+                GameManager.Instance.Win();
+            else
+                GameManager.Instance.Lose();
+        }
     }
 
 #if UNITY_EDITOR

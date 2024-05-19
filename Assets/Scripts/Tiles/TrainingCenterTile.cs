@@ -12,6 +12,7 @@ public class TrainingCenterTile : Tile
     private float timer;
 
     private Vector3Int gridPosition;
+    public int Health { get; private set; } = 50;
 
     public override bool StartUp(Vector3Int position, ITilemap tilemap, GameObject go)
     {
@@ -28,6 +29,20 @@ public class TrainingCenterTile : Tile
     private void RegisterOnUpdate()
     {
         TileManager.Instance.OnUpdate += Update;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        Health -= damage;
+        if (Health <= 0)
+        {
+            TileManager.Instance.OnUpdate -= Update;
+
+            if (IsEnemy)
+                GameManager.Instance.enemyTilemap.SetTile(gridPosition, null);
+            else
+                GameManager.Instance.buildingTilemap.SetTile(gridPosition, null);
+        }
     }
 
     private void Update()

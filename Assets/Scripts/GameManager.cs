@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.EventSystems;
 
-[DefaultExecutionOrder(-102)]
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
@@ -13,6 +12,11 @@ public class GameManager : MonoBehaviour
 
     public event Action<Vector2> OnChooseMove;
     public event Action<Vector2> OnShowContextMenu;
+
+    public Tilemap groundTilemap;
+    public Tilemap unwalkableTilemap;
+    public Tilemap buildingTilemap;
+    public Tilemap enemyTilemap;
 
     [HideInInspector] public Camera cachedCameraMain;
 
@@ -32,6 +36,16 @@ public class GameManager : MonoBehaviour
         cachedCameraMain = Camera.main;
 
         Tilemap.tilemapTileChanged += OnTilemapTileChanged;
+    }
+
+    public void Lose()
+    {
+        Debug.Log("Lost :(");
+    }
+
+    public void Win()
+    {
+        Debug.Log("WIN!!");
     }
 
     private void OnTilemapTileChanged(Tilemap tilemap, Tilemap.SyncTile[] arg2) => recalcNavMesh = true;

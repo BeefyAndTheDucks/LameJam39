@@ -5,11 +5,17 @@ using UnityEngine.Tilemaps;
 public class WorkerHousingTile : Tile
 {
     [SerializeField] private bool IsEnemy;
+    public int Health { get; private set; } = 50;
+
+    private Vector3Int gridPosition;
 
     public override bool StartUp(Vector3Int position, ITilemap tilemap, GameObject go)
     {
+
         if (!Application.isPlaying)
             return false;
+
+        gridPosition = position;
 
         if (IsEnemy)
             EnemyWorkers.IncreaseWorkerLimit(2);
@@ -17,6 +23,24 @@ public class WorkerHousingTile : Tile
             Workers.IncreaseWorkerLimit(2);
 
         return base.StartUp(position, tilemap, go);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        Health -= damage;
+        if (Health <= 0)
+        {
+            if (IsEnemy)
+            {
+                EnemyWorkers.DecreaseWorkerLimit(2);
+                GameManager.Instance.enemyTilemap.SetTile(gridPosition, null);
+            }
+            else
+            {
+                Workers.DecreaseWorkerLimit(2);
+                GameManager.Instance.buildingTilemap.SetTile(gridPosition, null);
+            }
+        }
     }
 
 #if UNITY_EDITOR

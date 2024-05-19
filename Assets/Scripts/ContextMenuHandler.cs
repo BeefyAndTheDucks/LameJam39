@@ -6,10 +6,6 @@ using UnityEngine.UI;
 
 public class ContextMenuHandler : MonoBehaviour
 {
-    [SerializeField] private Tilemap groundTilemap;
-    [SerializeField] private Tilemap unwalkableTilemap;
-    [SerializeField] private Tilemap buildingTilemap;
-    [SerializeField] private Tilemap enemyTilemap;
     [SerializeField] private Grid grid;
     [SerializeField] private RectTransform contextMenuTransform;
     [SerializeField] private Button contextActionPrefab;
@@ -38,27 +34,27 @@ public class ContextMenuHandler : MonoBehaviour
         Vector3Int cellCoordinate = grid.WorldToCell(new Vector3(clickedPosition.x, clickedPosition.y, 0));
 
         // Check if there is a unwalkable tile there
-        if (unwalkableTilemap.HasTile(cellCoordinate))
+        if (GameManager.Instance.unwalkableTilemap.HasTile(cellCoordinate))
         {
             // There is a unwalkable tile. Create a destruction context menu
-            CreateDestructionContextMenu(cellCoordinate, unwalkableTilemap);
+            CreateDestructionContextMenu(cellCoordinate, GameManager.Instance.unwalkableTilemap);
             return;
         }
 
         // Check for enemy
-        if (enemyTilemap.HasTile(cellCoordinate))
+        if (GameManager.Instance.enemyTilemap.HasTile(cellCoordinate))
         {
             // There is a enemy tile. Create a attack context menu
-            CreateAttackContextMenu(cellCoordinate, enemyTilemap);
+            CreateAttackContextMenu(cellCoordinate, GameManager.Instance.enemyTilemap);
             return;
         }
 
         // Check for building
-        if (buildingTilemap.HasTile(cellCoordinate))
+        if (GameManager.Instance.buildingTilemap.HasTile(cellCoordinate))
             return;
 
         // There will always be ground. But a defensive check can't hurt
-        if (!groundTilemap.HasTile(cellCoordinate))
+        if (!GameManager.Instance.groundTilemap.HasTile(cellCoordinate))
         {
             Debug.Log($"Ground tilemap doesn't have a tile at {cellCoordinate}");
             return;
@@ -134,14 +130,8 @@ public class ContextMenuHandler : MonoBehaviour
     private void CreateBuildContextMenu(Vector3Int cellCoordinate)
     {
         BeginContextMenu("Build");
-        CreateBuildingButton(trainingCenterTile, cellCoordinate, buildingTilemap, "Training Center");
-        CreateBuildingButton(workerHousingTile, cellCoordinate, buildingTilemap, "Worker Housing");
-        FinishContextMenu(cellCoordinate);
-    }
-
-    private void CreateBuildingConfigurationContextMenu(Vector3Int cellCoordinate, Tilemap tilemap)
-    {
-        BeginContextMenu("Configure");
+        CreateBuildingButton(trainingCenterTile, cellCoordinate, GameManager.Instance.buildingTilemap, "Training Center");
+        CreateBuildingButton(workerHousingTile, cellCoordinate, GameManager.Instance.buildingTilemap, "Worker Housing");
         FinishContextMenu(cellCoordinate);
     }
 
