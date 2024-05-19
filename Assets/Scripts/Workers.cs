@@ -37,6 +37,7 @@ public static class Workers
     }
 
     public static bool HasAvailableWorkers() => workerQueue.Count > 0;
+    public static int GetAvailableWorkers() => workerQueue.Count;
 
     private static void OnDeath(object sender, System.EventArgs e)
     {

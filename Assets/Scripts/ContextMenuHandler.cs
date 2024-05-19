@@ -16,6 +16,7 @@ public class ContextMenuHandler : MonoBehaviour
     [SerializeField] private Button contextActionPrefab;
     [SerializeField] private TMP_Text titleText;
     [SerializeField] private TrainingCenterTile trainingCenterTile;
+    [SerializeField] private WorkerHousingTile workerHousingTile;
 
     public bool IsContextMenuEnabled => contextMenuTransform.gameObject.activeSelf;
 
@@ -146,6 +147,7 @@ public class ContextMenuHandler : MonoBehaviour
     {
         BeginContextMenu("Build");
         CreateBuildingButton(trainingCenterTile, cellCoordinate, buildingTilemap, "Training Center");
+        CreateBuildingButton(workerHousingTile, cellCoordinate, buildingTilemap, "Worker Housing");
         FinishContextMenu(cellCoordinate);
     }
 
