@@ -11,6 +11,7 @@ public class ContextMenuHandler : MonoBehaviour
     [SerializeField] private TMP_Text titleText;
     [SerializeField] private TrainingCenterTile trainingCenterTile;
     [SerializeField] private WorkerHousingTile workerHousingTile;
+    [SerializeField] private TurretTile turretTile;
 
     public bool IsContextMenuEnabled => contextMenuTransform.gameObject.activeSelf;
 
@@ -131,6 +132,7 @@ public class ContextMenuHandler : MonoBehaviour
         BeginContextMenu("Build");
         CreateBuildingButton(trainingCenterTile, cellCoordinate, GameManager.Instance.buildingTilemap, "Training Center");
         CreateBuildingButton(workerHousingTile, cellCoordinate, GameManager.Instance.buildingTilemap, "Worker Housing");
+        CreateBuildingButton(turretTile, cellCoordinate, GameManager.Instance.buildingTilemap, "Turret");
         FinishContextMenu(cellCoordinate);
     }
 

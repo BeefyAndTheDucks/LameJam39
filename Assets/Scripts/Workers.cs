@@ -87,7 +87,7 @@ public static class EnemyWorkers
     public static void ReturnWorker(Worker worker)
     {
         workerQueue.Enqueue(worker);
-        worker.Goto(FactionCentreTile.Instance.worldPosition);
+        worker.Goto(FactionCentreTile.EnemyInstance.worldPosition);
     }
 
     public static Worker CreateWorker(Vector3 position)

@@ -23,6 +23,8 @@ public class TrainingCenterTile : AttackableTile
 
         gridPosition = position;
 
+        Health = 50;
+
         return base.StartUp(position, tilemap, go);
     }
 

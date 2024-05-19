@@ -28,6 +28,8 @@ public class FactionCentreTile : AttackableTile
         else
             TileManager.OnReady += RegisterWorldPosition;
 
+        Health = 500;
+
         return base.StartUp(position, tilemap, go);
     }
 

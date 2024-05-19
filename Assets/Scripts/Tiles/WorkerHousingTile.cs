@@ -22,6 +22,8 @@ public class WorkerHousingTile : AttackableTile
         else
             Workers.IncreaseWorkerLimit(2);
 
+        Health = 50;
+
         return base.StartUp(position, tilemap, go);
     }
 

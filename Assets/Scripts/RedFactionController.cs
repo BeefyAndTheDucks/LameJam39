@@ -4,7 +4,7 @@ public class RedFactionController : MonoBehaviour
 {
     private bool createHousing = false;
     private float actionTimer;
-    private float actionTimerMax = 2.0f;
+    private float actionTimerMax = 5.0f;
 
     private int currentXOffset = 0;
     private int currentYOffset = 0;
@@ -13,6 +13,7 @@ public class RedFactionController : MonoBehaviour
 
     [SerializeField] private TrainingCenterTile enemyTrainingCenterTile;
     [SerializeField] private WorkerHousingTile enemyWorkerHousingTile;
+    [SerializeField] private TurretTile enemyTurretTile;
 
     private void Awake()
     {
@@ -36,7 +37,22 @@ public class RedFactionController : MonoBehaviour
 
     private void PickAction()
     {
-        if (createHousing)
+        if (EnemyWorkers.HasAvailableWorkers(5))
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                bool success = EnemyWorkers.TryRequestWorker(out Worker worker);
+                if (!success)
+                {
+                    Debug.LogError("Failed to request worker");
+                    return;
+                }
+
+                worker.Goto(FactionCentreTile.Instance.worldPosition, () => worker.Attack(FactionCentreTile.Instance, () => EnemyWorkers.ReturnWorker(worker)));
+            }
+        }
+
+        if (createHousing || Random.Range(0, 10) <= 3)
         {
             createHousing = false;
 
@@ -59,24 +75,7 @@ public class RedFactionController : MonoBehaviour
             return;
         }
 
-        if (EnemyWorkers.HasAvailableWorkers(5))
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                bool success = EnemyWorkers.TryRequestWorker(out Worker worker);
-                if (!success)
-                {
-                    Debug.LogError("Failed to request worker");
-                    return;
-                }
-
-                worker.Goto(FactionCentreTile.Instance.worldPosition, () => worker.Attack(FactionCentreTile.Instance, () => EnemyWorkers.ReturnWorker(worker)));
-            }
-
-            return;
-        }
-
-        if (EnemyWorkers.GetWorkerCount() < EnemyWorkers.GetWorkerLimit())
+        if (EnemyWorkers.GetWorkerCount() < EnemyWorkers.GetWorkerLimit() || Random.Range(0, 10) <= 1)
         {
             bool success = EnemyWorkers.TryRequestWorker(out Worker worker);
             if (!success)
@@ -98,6 +97,24 @@ public class RedFactionController : MonoBehaviour
         }
 
         // Create Turret
+
+        bool _success = EnemyWorkers.TryRequestWorker(out Worker _worker);
+        if (!_success)
+        {
+            Debug.LogError("Failed to request worker");
+            return;
+        }
+
+        _success = PickPosition(out Vector3Int _cellPos);
+        if (!_success)
+        {
+            Debug.LogError("Failed to find position");
+            return;
+        }
+
+        _worker.Goto(GameManager.Instance.grid.CellToWorld(_cellPos), () => WorkerReleaseWrapper(() => GameManager.Instance.enemyTilemap.SetTile(_cellPos, enemyTurretTile), _worker));
+
+        return;
     }
 
     private void WorkerReleaseWrapper(System.Action action, Worker worker)
@@ -122,6 +139,11 @@ public class RedFactionController : MonoBehaviour
             pos = FactionCentreTile.EnemyInstance.gridPosition;
 
             return false;
+        }
+
+        if (currentXOffset == 0 && currentYOffset == 0)
+        {
+            currentXOffset = 2;
         }
 
         pos = FactionCentreTile.EnemyInstance.gridPosition + new Vector3Int(currentXOffset, currentYOffset, 0);
