@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public Tilemap unwalkableTilemap;
     public Tilemap buildingTilemap;
     public Tilemap enemyTilemap;
+    public Grid grid;
 
     [HideInInspector] public Camera cachedCameraMain;
 

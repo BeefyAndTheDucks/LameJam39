@@ -103,7 +103,7 @@ public static class EnemyWorkers
         return createdWorker;
     }
 
-    public static bool HasAvailableWorkers() => workerQueue.Count > 0;
+    public static bool HasAvailableWorkers(int amount = 1) => workerQueue.Count >= amount;
     public static int GetAvailableWorkers() => workerQueue.Count;
 
     private static void OnDeath(object sender, System.EventArgs e)
@@ -134,4 +134,7 @@ public static class EnemyWorkers
     {
         WorkerLimit += by;
     }
+
+    public static int GetWorkerLimit() => WorkerLimit;
+    public static int GetWorkerCount() => workers.Count;
 }

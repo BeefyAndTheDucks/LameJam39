@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class ContextMenuHandler : MonoBehaviour
 {
-    [SerializeField] private Grid grid;
     [SerializeField] private RectTransform contextMenuTransform;
     [SerializeField] private Button contextActionPrefab;
     [SerializeField] private TMP_Text titleText;
@@ -31,7 +30,7 @@ public class ContextMenuHandler : MonoBehaviour
     private void OnShowContextMenu(Vector2 clickedPosition)
     {
         // Get cell coordinates
-        Vector3Int cellCoordinate = grid.WorldToCell(new Vector3(clickedPosition.x, clickedPosition.y, 0));
+        Vector3Int cellCoordinate = GameManager.Instance.grid.WorldToCell(new Vector3(clickedPosition.x, clickedPosition.y, 0));
 
         // Check if there is a unwalkable tile there
         if (GameManager.Instance.unwalkableTilemap.HasTile(cellCoordinate))
@@ -124,7 +123,7 @@ public class ContextMenuHandler : MonoBehaviour
             Debug.LogError("Failed to request worker");
             return;
         }
-        worker.Goto(grid.CellToWorld(position), () => WorkerReleaseWrapper(() => tilemap.SetTile(position, tile), worker));
+        worker.Goto(GameManager.Instance.grid.CellToWorld(position), () => WorkerReleaseWrapper(() => tilemap.SetTile(position, tile), worker));
     });
 
     private void CreateBuildContextMenu(Vector3Int cellCoordinate)
@@ -158,7 +157,7 @@ public class ContextMenuHandler : MonoBehaviour
                     return;
                 }
 
-                worker.Goto(grid.CellToWorld(cellCoordinate), () =>
+                worker.Goto(GameManager.Instance.grid.CellToWorld(cellCoordinate), () =>
                 {
                     worker.Attack(attackableTile, () => Workers.ReturnWorker(worker));
                 });
@@ -187,7 +186,7 @@ public class ContextMenuHandler : MonoBehaviour
                 Debug.LogError("Failed to request worker");
                 return;
             }
-            worker.Goto(grid.CellToWorld(cellCoordinate), () => WorkerReleaseWrapper(() => tilemap.SetTile(cellCoordinate, null), worker));
+            worker.Goto(GameManager.Instance.grid.CellToWorld(cellCoordinate), () => WorkerReleaseWrapper(() => tilemap.SetTile(cellCoordinate, null), worker));
         }), "Deconstruct", Color.green, Workers.HasAvailableWorkers());
         FinishContextMenu(cellCoordinate);
     }
