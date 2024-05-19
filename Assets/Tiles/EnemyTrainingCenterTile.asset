@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f9caff007d4eb942bf1d2e9a8ca8731, type: 3}
   m_Name: EnemyTrainingCenterTile
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 21300000, guid: bb75d49b309030744b94321994f7b52c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fc8058356fa976d4684421cb9952ce0a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
@@ -34,3 +34,5 @@ MonoBehaviour:
   m_InstancedGameObject: {fileID: 0}
   m_Flags: 1
   m_ColliderType: 1
+  timeToSpawnWorker: 5
+  IsEnemy: 1

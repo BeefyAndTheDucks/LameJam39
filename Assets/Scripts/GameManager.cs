@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float maximumContextMenuDistance = 2.0f;
 
     [field: SerializeField] public Worker workerPrefab { get; private set; }
+    [field: SerializeField] public Worker enemyWorkerPrefab { get; private set; }
     [field: SerializeField] public Transform workerParent { get; private set; }
 
     private bool recalcNavMesh = true;

@@ -92,7 +92,7 @@ public static class EnemyWorkers
         if (workers.Count >= WorkerLimit)
             return null;
 
-        Worker createdWorker = Object.Instantiate(GameManager.Instance.workerPrefab, GameManager.Instance.workerParent);
+        Worker createdWorker = Object.Instantiate(GameManager.Instance.enemyWorkerPrefab, GameManager.Instance.workerParent);
         createdWorker.transform.position = position;
         createdWorker.Goto(position);
         workers.Add(createdWorker);
