@@ -51,7 +51,7 @@ public class TurretTile : AttackableTile
         if (timer >= timeToAttack)
         {
             Vector3 position = TileManager.Instance.CellToWorld(gridPosition);
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(position, 20);
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(position, 5);
 
             foreach (Collider2D collider in colliders)
             {
