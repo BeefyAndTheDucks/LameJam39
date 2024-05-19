@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ContextMenuHandler contextMenuHandler;
     [SerializeField] private NavMeshSurface navMesh;
     [SerializeField] private float maximumContextMenuDistance = 2.0f;
+    [SerializeField] private WinLooseScreen winLooseScreen;
 
     [field: SerializeField] public Worker workerPrefab { get; private set; }
     [field: SerializeField] public Worker enemyWorkerPrefab { get; private set; }
@@ -41,11 +42,13 @@ public class GameManager : MonoBehaviour
     public void Lose()
     {
         Debug.Log("Lost :(");
+        winLooseScreen.Lose();
     }
 
     public void Win()
     {
         Debug.Log("WIN!!");
+        winLooseScreen.Win();
     }
 
     private void OnTilemapTileChanged(Tilemap tilemap, Tilemap.SyncTile[] arg2) => recalcNavMesh = true;
