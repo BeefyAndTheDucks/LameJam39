@@ -67,6 +67,9 @@ public static class Workers
     {
         WorkerLimit += by;
     }
+
+    public static int GetWorkerLimit() => WorkerLimit;
+    public static int GetWorkerCount() => workers.Count;
 }
 
 public static class EnemyWorkers
