@@ -42,9 +42,9 @@ public class TrainingCenterTile : Tile
 #if UNITY_EDITOR
     // The following is a helper that adds a menu item to create a TrainingCenterTile Asset
     [MenuItem("Assets/Create/TrainingCenterTile")]
-    public static void CreateRoadTile()
+    public static void CreateTile()
     {
-        string path = EditorUtility.SaveFilePanelInProject("Save Training Center Tile", "New Training Center Tile", "Asset", "Save Training Center Tile", "Assets");
+        string path = EditorUtility.SaveFilePanelInProject("Save Training Center Tile", "New Training Center Tile", "asset", "Save Training Center Tile", "Assets");
         if (path == "")
             return;
         AssetDatabase.CreateAsset(CreateInstance<TrainingCenterTile>(), path);

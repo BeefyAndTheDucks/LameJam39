@@ -17,6 +17,7 @@ public static class Workers
     public static void ReturnWorker(Worker worker)
     {
         workerQueue.Enqueue(worker);
+        worker.Goto(FactionCentreTile.Instance.worldPosition);
     }
 
     public static Worker CreateWorker(Vector3 position)
