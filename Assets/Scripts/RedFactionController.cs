@@ -52,6 +52,12 @@ public class RedFactionController : MonoBehaviour
             }
         }
 
+        if (!EnemyWorkers.HasAvailableWorkers())
+        {
+            createHousing = true;
+            return; // No more workers available...........
+        }
+
         if (createHousing || Random.Range(0, 10) <= 3)
         {
             createHousing = false;
