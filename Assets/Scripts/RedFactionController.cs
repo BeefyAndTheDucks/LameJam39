@@ -37,7 +37,7 @@ public class RedFactionController : MonoBehaviour
 
     private void PickAction()
     {
-        if (EnemyWorkers.HasAvailableWorkers(5))
+        if (EnemyWorkers.HasAvailableWorkers(6))
         {
             for (int i = 0; i < 5; i++)
             {
@@ -50,12 +50,6 @@ public class RedFactionController : MonoBehaviour
 
                 worker.Goto(FactionCentreTile.Instance.worldPosition, () => worker.Attack(FactionCentreTile.Instance, () => EnemyWorkers.ReturnWorker(worker)));
             }
-        }
-
-        if (!EnemyWorkers.HasAvailableWorkers())
-        {
-            createHousing = true;
-            return; // No more workers available...........
         }
 
         if (createHousing || Random.Range(0, 10) <= 3)
