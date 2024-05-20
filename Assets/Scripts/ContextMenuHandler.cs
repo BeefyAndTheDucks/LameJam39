@@ -114,7 +114,7 @@ public class ContextMenuHandler : MonoBehaviour
         return createdButton;
     }
 
-    private void CreateBuildingButton(TileBase tile, Vector3Int position, Tilemap tilemap, string friendlyTileName) => CreateButton(() => BuildingButtonWrapper(tile, position, tilemap), friendlyTileName, Color.white);
+    private void CreateBuildingButton(TileBase tile, Vector3Int position, Tilemap tilemap, string friendlyTileName) => CreateButton(() => BuildingButtonWrapper(tile, position, tilemap), friendlyTileName, Color.white, Workers.HasAvailableWorkers());
 
     private void BuildingButtonWrapper(TileBase tile, Vector3Int position, Tilemap tilemap) => ButtonActionWrapper(() =>
     {
