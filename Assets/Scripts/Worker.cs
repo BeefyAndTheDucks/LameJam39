@@ -1,11 +1,13 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(NavAgentHandler), typeof(Animator))]
 public class Worker : MonoBehaviour
 {
     public event EventHandler OnDeath;
-    public int Health { get; private set; } = 100;
+    private const int k_MaxHealth = 100;
+    public int Health { get; private set; } = k_MaxHealth;
     public bool IsEnemy = false;
 
     [SerializeField] private float attackSpeed = 1.0f;
@@ -17,14 +19,22 @@ public class Worker : MonoBehaviour
 
     private Action onFinishedAttacking;
 
+    [SerializeField] private GameObject healthBarCanvas;
+    [SerializeField] private Image healthBar;
+
     private void Awake()
     {
         navAgentHandler = GetComponent<NavAgentHandler>();
+        healthBarCanvas.SetActive(false);
     }
 
     public void TakeDamage(int damage)
     {
         Health -= damage;
+
+        healthBar.fillAmount = (float)Health / k_MaxHealth;
+        healthBarCanvas.SetActive(true);
+
         if (Health <= 0)
             OnDeath?.Invoke(this, EventArgs.Empty);
     }
