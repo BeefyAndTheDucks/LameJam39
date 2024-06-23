@@ -27,7 +27,7 @@ public static class Workers
 
         Worker createdWorker = Object.Instantiate(GameManager.Instance.workerPrefab, GameManager.Instance.workerParent);
         createdWorker.transform.position = position;
-        createdWorker.Goto(position);
+        createdWorker.Goto(FactionCentreTile.Instance.worldPosition);
         workers.Add(createdWorker);
         workerQueue.Enqueue(createdWorker);
 
@@ -97,7 +97,7 @@ public static class EnemyWorkers
 
         Worker createdWorker = Object.Instantiate(GameManager.Instance.enemyWorkerPrefab, GameManager.Instance.workerParent);
         createdWorker.transform.position = position;
-        createdWorker.Goto(position);
+        createdWorker.Goto(FactionCentreTile.EnemyInstance.worldPosition);
         workers.Add(createdWorker);
         workerQueue.Enqueue(createdWorker);
 
