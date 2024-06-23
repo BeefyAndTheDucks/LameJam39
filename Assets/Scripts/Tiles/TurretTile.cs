@@ -58,7 +58,7 @@ public class TurretTile : AttackableTile
                 if (collider.TryGetComponent(out Worker worker))
                 {
                     if (worker.IsEnemy != IsEnemy)
-                        worker.TakeDamage(5);
+                        worker.TakeDamage(20);
                 }
             }
 

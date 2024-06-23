@@ -47,7 +47,7 @@ public class Worker : MonoBehaviour
 
     public void Goto(Vector3 position, Action onArrivedAction = null)
     {
-        navAgentHandler.SetTarget(position, onArrivedAction);
+        navAgentHandler.SetTarget(position + new Vector3(0.5f, 0.5f, 0.0f), onArrivedAction);
     }
 
     private void Update()
