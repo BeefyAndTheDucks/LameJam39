@@ -30,6 +30,10 @@ public class GameManager : MonoBehaviour
     [field: SerializeField] public Worker enemyWorkerPrefab { get; private set; }
     [field: SerializeField] public Transform workerParent { get; private set; }
 
+    [field: SerializeField] public TrainingCenterTile enemyTrainingCenterTile { get; private set; }
+    [field: SerializeField] public WorkerHousingTile enemyWorkerHousingTile { get; private set; }
+    [field: SerializeField] public TurretTile enemyTurretTile { get; private set; }
+
     private bool recalcNavMesh = true;
 
     private void Awake()
