@@ -14,12 +14,12 @@ public class Worker : MonoBehaviour
     private AttackableTile attackingTile;
 
     private NavAgentHandler navAgentHandler;
-    private Animator animator;
+
+    private Action onFinishedAttacking;
 
     private void Awake()
     {
         navAgentHandler = GetComponent<NavAgentHandler>();
-        animator = GetComponent<Animator>();
     }
 
     public void TakeDamage(int damage)
@@ -32,6 +32,7 @@ public class Worker : MonoBehaviour
     public void Attack(AttackableTile tile, Action onFinished)
     {
         attackingTile = tile;
+        onFinishedAttacking = onFinished;
     }
 
     public void Goto(Vector3 position, Action onArrivedAction = null)
@@ -51,6 +52,10 @@ public class Worker : MonoBehaviour
             }
         }
         else
+        {
             attackTimer = 0;
+            onFinishedAttacking?.Invoke();
+            onFinishedAttacking = null;
+        }
     }
 }
