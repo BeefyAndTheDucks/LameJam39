@@ -1,16 +1,17 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(NavMeshAgent), typeof(SpriteRenderer))]
 public class NavAgentHandler : MonoBehaviour
 {
     [SerializeField] private Vector3 target;
-    [SerializeField] private float rotationSpeedMultiplier = 5f;
+    //[SerializeField] private float rotationSpeedMultiplier = 5f;
     [SerializeField] private float destinationDistanceThreshold = 1f;
 
     private NavMeshAgent agent;
     private LineRenderer lineRenderer;
     private Animator animator;
+    private SpriteRenderer spriteRenderer;
 
     private bool useLineRenderer;
     private bool useAnimator;
@@ -24,6 +25,8 @@ public class NavAgentHandler : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
         agent.updateUpAxis = false;
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         useLineRenderer = TryGetComponent(out lineRenderer);
         useAnimator = TryGetComponent(out animator);
@@ -90,10 +93,18 @@ public class NavAgentHandler : MonoBehaviour
         {
             // Calculate the angle required to face the direction of movement
             float angle = Mathf.Atan2(agent.velocity.y, agent.velocity.x) * Mathf.Rad2Deg;
+            
+            bool flip = angle > 90.0f || angle < -90.0f; 
+
+            //if (gameObject.name == "Player")
+                //Debug.Log($"Flip = {flip} | Angle = {angle} | Angle > 90.0f = {angle > 90.0f} | Angle < -90.0f = {angle < -90.0f}");
+
+
+            spriteRenderer.flipX = flip;
 
             // Apply the rotation to the agent's transform
-            Quaternion desiredRotation = Quaternion.Euler(new Vector3(0, 0, angle));
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, desiredRotation, agent.angularSpeed * Time.deltaTime * rotationSpeedMultiplier);
+            // Quaternion desiredRotation = Quaternion.Euler(new Vector3(0, 0, angle));
+            // transform.rotation = Quaternion.RotateTowards(transform.rotation, desiredRotation, agent.angularSpeed * Time.deltaTime * rotationSpeedMultiplier);
         }
     }
 
