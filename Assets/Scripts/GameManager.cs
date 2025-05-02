@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using NavMeshPlus.Components;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -42,18 +43,22 @@ public class GameManager : MonoBehaviour
         cachedCameraMain = Camera.main;
 
         Tilemap.tilemapTileChanged += OnTilemapTileChanged;
+        
+        Time.timeScale = 0.0f;
     }
 
     public void Lose()
     {
         Debug.Log("Lost :(");
         winLooseScreen.Lose();
+        Time.timeScale = 0.0f;
     }
 
     public void Win()
     {
         Debug.Log("WIN!!");
         winLooseScreen.Win();
+        Time.timeScale = 0.0f;
     }
 
     private void OnTilemapTileChanged(Tilemap tilemap, Tilemap.SyncTile[] arg2) => recalcNavMesh = true;
@@ -97,9 +102,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private async void UpdateNavMesh()
+    private async Task UpdateNavMesh()
     {
         Debug.Log("Updating NavMesh");
         await navMesh.UpdateNavMesh(navMesh.navMeshData);
+    }
+
+    public void StartGame()
+    {
+        Time.timeScale = 1.0f;
     }
 }

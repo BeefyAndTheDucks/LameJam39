@@ -50,15 +50,14 @@ public class TrainingCenterTile : AttackableTile
     private void Update()
     {
         timer += Time.deltaTime;
-        if (timer >= timeToSpawnWorker)
-        {
-            Vector3 position = TileManager.Instance.CellToWorld(gridPosition);
-            if (IsEnemy)
-                EnemyWorkers.CreateWorker(position);
-            else
-                Workers.CreateWorker(position);
-            timer = 0;
-        }
+        if (timer < timeToSpawnWorker) return;
+        
+        Vector3 position = TileManager.Instance.CellToWorld(gridPosition);
+        if (IsEnemy)
+            EnemyWorkers.CreateWorker(position + new Vector3(0.5f, 0.5f, 0.0f));
+        else
+            Workers.CreateWorker(position + new Vector3(0.5f, 0.5f, 0.0f));
+        timer = 0;
     }
 
 #if UNITY_EDITOR
